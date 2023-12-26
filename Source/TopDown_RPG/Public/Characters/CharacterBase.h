@@ -6,7 +6,8 @@
 #include "GameFramework/Character.h"
 #include "CharacterBase.generated.h"
 
-UCLASS()
+/* The abstract specifier to the class macro prevents this class from being able to be dragged into the level. */
+UCLASS(Abstract)
 class TOPDOWN_RPG_API ACharacterBase : public ACharacter
 {
 	GENERATED_BODY()
@@ -19,11 +20,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+protected:
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	TObjectPtr<USkeletalMeshComponent> Weapon;
 };
