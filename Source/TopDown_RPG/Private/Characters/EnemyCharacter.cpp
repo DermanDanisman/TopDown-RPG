@@ -9,7 +9,29 @@ AEnemyCharacter::AEnemyCharacter()
 
 }
 
+void AEnemyCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (bHighlighted)
+		DrawDebugSphere(GetWorld(), GetActorLocation(), 50.f, 12.f, FColor::Red, false);
+}
+
+
 void AEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 }
+
+void AEnemyCharacter::HighlightActor()
+{
+	bHighlighted = true;
+	FString Name = GetName();
+	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Red, FString::Printf(TEXT("Name: %s"), *Name));
+}
+
+void AEnemyCharacter::UnHighlightActor()
+{
+	bHighlighted = false;
+}
+
