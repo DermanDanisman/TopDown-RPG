@@ -2,19 +2,19 @@
 
 
 #include "Characters/EnemyCharacter.h"
+#include "TopDown_RPG/TopDown_RPG.h"
 
 // Sets default values
 AEnemyCharacter::AEnemyCharacter()
 {
+	/* This is in case for we need to change CursorTrace from ForObjects to ForChannels */
+	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
 
 }
 
 void AEnemyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	if (bHighlighted)
-		DrawDebugSphere(GetWorld(), GetActorLocation(), 50.f, 12.f, FColor::Red, false);
 }
 
 
@@ -25,13 +25,15 @@ void AEnemyCharacter::BeginPlay()
 
 void AEnemyCharacter::HighlightActor()
 {
-	bHighlighted = true;
-	FString Name = GetName();
-	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Red, FString::Printf(TEXT("Name: %s"), *Name));
+	GetMesh()->SetRenderCustomDepth(true);
+	GetMesh()->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
+	WeaponMesh->SetRenderCustomDepth(true);
+	WeaponMesh->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
 }
 
 void AEnemyCharacter::UnHighlightActor()
 {
-	bHighlighted = false;
+	GetMesh()->SetRenderCustomDepth(false);
+	WeaponMesh->SetRenderCustomDepth(false);
 }
 

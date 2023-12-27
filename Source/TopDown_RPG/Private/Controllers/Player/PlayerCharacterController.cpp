@@ -28,8 +28,8 @@ void APlayerCharacterController::PlayerTick(float DeltaTime)
 void APlayerCharacterController::CursorTrace()
 {
 	FHitResult CursorHit;
-	GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, CursorHit);
-	//GetHitResultUnderCursorForObjects(CursorTraceObjectType, false, CursorHit);
+	//GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, CursorHit);
+	GetHitResultUnderCursorForObjects(CursorTraceObjectType, false, CursorHit);
 	if (!CursorHit.bBlockingHit) return;
 
 	/* LastActor will store what ThisActor was before we updated it. 

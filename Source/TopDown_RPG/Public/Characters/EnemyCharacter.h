@@ -30,8 +30,6 @@ public:
 	So we have to override both of these. */
 	virtual void HighlightActor() override;
 	virtual void UnHighlightActor() override;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	bool bHighlighted = false;
 
 protected:
 	// Called when the game starts or when spawned
