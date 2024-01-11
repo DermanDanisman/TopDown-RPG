@@ -41,6 +41,8 @@ private:
 	UFUNCTION()
 	void SetCursorSettings();
 
+private:
+
 	/**************
 	* Cursor Trace
 	*/
@@ -60,6 +62,7 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "References")
 	TObjectPtr<ACharacter> ControlledCharacter = nullptr;
 
+private:
 	/*******
 	* Input
 	*/
@@ -70,6 +73,19 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> IA_Move;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> IA_GamepadCursor;
+
 	UFUNCTION()
 	void Move(const FInputActionValue& InputActionValue);
+
+	UFUNCTION()
+	void ControlCursorWithGamepad(const FInputActionValue& InputActionValue);
+
+	UPROPERTY(EditAnywhere, Category = "Input")
+	float ThumbstickXSensitivity = 10.f;
+
+	UPROPERTY(EditAnywhere, Category = "Input")
+	float ThumbstickYSensitivity = 10.f;
+
 };
