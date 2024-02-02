@@ -4,6 +4,7 @@
 #include "Controllers/Player/PlayerCharacterController.h"
 /* Game Framework */
 #include "GameFramework/Character.h"
+#include "GameFramework/Actor.h"
 /* Enhanced Input */
 #include "EnhancedInputSubsystems.h"
 #include "InputAction.h"
@@ -11,6 +12,9 @@
 #include "InputActionValue.h"
 /* Interfaces */
 #include "Interfaces/HighlightInterface.h"
+/* Kismet */
+#include "Kismet/GameplayStatics.h"
+
 
 APlayerCharacterController::APlayerCharacterController()
 {
@@ -56,7 +60,12 @@ void APlayerCharacterController::SetupInputComponent()
 	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
 	// Moving
 	EnhancedInputComponent->BindAction(IA_Move, ETriggerEvent::Triggered, this, &APlayerCharacterController::Move);
-	// Cursor Control with Gamepad
+	// Highlight All Actors in the Camera View
+	EnhancedInputComponent->BindAction(IA_HighlightAll, ETriggerEvent::Started, this, &APlayerCharacterController::GetHighlightableActors);
+	EnhancedInputComponent->BindAction(IA_HighlightAll, ETriggerEvent::Triggered, this, &APlayerCharacterController::HighlightAll);
+	// UnHighlight All Actors in the Camera View
+	EnhancedInputComponent->BindAction(IA_HighlightAll, ETriggerEvent::Completed, this, &APlayerCharacterController::UnhighlightAll);
+	// Cursor Control with Gamepad Right Thumbstick
 	EnhancedInputComponent->BindAction(IA_GamepadCursor, ETriggerEvent::Triggered, this, &APlayerCharacterController::ControlCursorWithGamepad);
 }
 
@@ -67,6 +76,7 @@ void APlayerCharacterController::CursorTrace()
 
 	/* This is TraceForChannels */
 	//GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, CursorHit);
+	/* This is TraceForObjects */
 	GetHitResultUnderCursorForObjects(CursorTraceObjectType, false, CursorHit);
 
 	if (!CursorHit.bBlockingHit) return;
@@ -135,7 +145,7 @@ void APlayerCharacterController::Move(const FInputActionValue& InputActionValue)
 	ControlledCharacter->AddMovementInput(RightDirection, InputAxisVector.X);
 }
 
-/* Input Function responsible for cursor movement using Gamepad Left Thumbstick */
+/* Input Function responsible for cursor movement using Gamepad Left Thumbstick */ /* Heathrow */
 void APlayerCharacterController::ControlCursorWithGamepad(const FInputActionValue& InputActionValue)
 {
 	const FVector2D InputAxisVector = InputActionValue.Get<FVector2D>();
@@ -151,4 +161,59 @@ void APlayerCharacterController::ControlCursorWithGamepad(const FInputActionValu
 	int Y = LocationY + ThumbstickY;
 
 	SetMouseLocation(X, Y);
+}
+
+/* When Pressed ALT Gets All Highlightable Objects */ /* Heathrow */
+void APlayerCharacterController::GetHighlightableActors()
+{
+	HighlightableActors.Empty();
+
+	if (HighlightableActors.IsEmpty())
+	{
+		TArray<TObjectPtr<AActor>> Actors;
+		UGameplayStatics::GetAllActorsWithTag(GetWorld(), "HighlightableActors", Actors);
+		for (int i = 0; i < Actors.Num(); i++)
+		{
+			HighlightableActors.Add(Cast<IHighlightInterface>(Actors[i]));
+		}
+	}
+}
+
+/* Highlightable objects within certain range gets highlighted */ /* Heathrow */
+void APlayerCharacterController::HighlightAll()
+{
+	//GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Blue, FString::Printf(TEXT("Highlight All")));
+
+	// The distance between the player and farthest object that can be highlighted
+	float Distance = 1000.f;
+
+	if (!HighlightableActors.IsEmpty())
+	{
+		for (int i = 0; i < HighlightableActors.Num(); i++)
+		{
+			if (ControlledCharacter->GetDistanceTo(Cast<AActor>(HighlightableActors[i])) <= Distance)
+			{
+				HighlightableActors[i]->HighlightActor();
+			}
+			else
+			{
+				HighlightableActors[i]->UnHighlightActor();
+			}
+		}
+	}
+}
+
+/* When ALT button released all highlightable objects gets Unhighlighted and Arrays gets emptied */ /* Heathrow */
+void APlayerCharacterController::UnhighlightAll()
+{
+	//GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Blue, FString::Printf(TEXT("UnHighlight All")));
+
+	if (!HighlightableActors.IsEmpty())
+	{
+		for (int i = 0; i < HighlightableActors.Num(); i++)
+		{
+			HighlightableActors[i]->UnHighlightActor();
+		}
+		HighlightableActors.Empty();
+	}
 }

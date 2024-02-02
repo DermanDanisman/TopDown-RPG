@@ -46,10 +46,13 @@ private:
 	/**************
 	* Cursor Trace
 	*/
-
+	UFUNCTION()
 	void CursorTrace();
+
 	IHighlightInterface* LastActor;
+
 	IHighlightInterface* ThisActor;
+
 	UPROPERTY(EditAnywhere, Category = "Cursor Trace")
 	TArray<TEnumAsByte<EObjectTypeQuery>> CursorTraceObjectType;
 
@@ -63,6 +66,25 @@ private:
 	TObjectPtr<ACharacter> ControlledCharacter = nullptr;
 
 private:
+
+	/**********
+	* Highlight
+	*/
+
+	UPROPERTY(VisibleAnywhere, Category = "Highlight")
+	TArray<IHighlightInterface*> HighlightableActors;
+
+	UFUNCTION()
+	void GetHighlightableActors();
+
+	UFUNCTION()
+	void HighlightAll();
+
+	UFUNCTION()
+	void UnhighlightAll();
+
+private:
+
 	/*******
 	* Input
 	*/
@@ -76,16 +98,23 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> IA_GamepadCursor;
 
-	UFUNCTION()
-	void Move(const FInputActionValue& InputActionValue);
-
-	UFUNCTION()
-	void ControlCursorWithGamepad(const FInputActionValue& InputActionValue);
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> IA_HighlightAll;
 
 	UPROPERTY(EditAnywhere, Category = "Input")
 	float ThumbstickXSensitivity = 10.f;
 
 	UPROPERTY(EditAnywhere, Category = "Input")
 	float ThumbstickYSensitivity = 10.f;
+
+	UFUNCTION()
+	void Move(const FInputActionValue& InputActionValue);
+
+	UFUNCTION()
+	void ControlCursorWithGamepad(const FInputActionValue& InputActionValue);
+
+
+
+
 
 };

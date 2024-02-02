@@ -2,6 +2,7 @@
 
 
 #include "Characters/CharacterBase.h"
+#include "Components/SkeletalMeshComponent.h"
 
 // Sets default values
 ACharacterBase::ACharacterBase()

@@ -6,6 +6,9 @@
 #include "GameFramework/Character.h"
 #include "CharacterBase.generated.h"
 
+/* Forward Declaring Classes */
+class USkeletalMeshComponent;
+
 /* The abstract specifier to the class macro prevents this class from being able to be dragged into the level. */
 UCLASS(Abstract)
 class TOPDOWN_RPG_API ACharacterBase : public ACharacter
