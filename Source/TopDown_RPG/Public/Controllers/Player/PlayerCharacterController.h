@@ -46,6 +46,7 @@ private:
 	/**************
 	* Cursor Trace
 	*/
+
 	UFUNCTION()
 	void CursorTrace();
 
@@ -86,7 +87,7 @@ private:
 private:
 
 	/*******
-	* Input
+	* Input Variables
 	*/
 
 	UPROPERTY(EditAnywhere, Category = "Input")
@@ -107,14 +108,17 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	float ThumbstickYSensitivity = 10.f;
 
+	/*******
+	* Input Variables Functions
+	*/
+
 	UFUNCTION()
 	void Move(const FInputActionValue& InputActionValue);
 
 	UFUNCTION()
 	void ControlCursorWithGamepad(const FInputActionValue& InputActionValue);
 
-
-
+private:
 
 
 };

@@ -46,8 +46,11 @@ void APlayerCharacterController::BeginPlay()
 	/* Adding Mapping Context */
 	UEnhancedInputLocalPlayerSubsystem* InputLocalPlayerSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
 	check(InputLocalPlayerSubsystem);
-	InputLocalPlayerSubsystem->ClearAllMappings();
-	InputLocalPlayerSubsystem->AddMappingContext(DefaultContext, 0);
+	if (InputLocalPlayerSubsystem)
+	{
+		InputLocalPlayerSubsystem->ClearAllMappings();
+		InputLocalPlayerSubsystem->AddMappingContext(DefaultContext, 0);
+	}
 
 	SetCursorSettings();
 }
