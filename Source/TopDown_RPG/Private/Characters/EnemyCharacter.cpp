@@ -3,6 +3,9 @@
 
 #include "Characters/EnemyCharacter.h"
 #include "TopDown_RPG/TopDown_RPG.h"
+/* Ability System */
+#include "AbilitySystem/BaseAbilitySystemComponent.h"
+#include "AbilitySystem/BaseAttributeSet.h"
 
 // Sets default values
 AEnemyCharacter::AEnemyCharacter()
@@ -10,6 +13,10 @@ AEnemyCharacter::AEnemyCharacter()
 	/* This is in case for we need to change CursorTrace from ForObjects to ForChannels */
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
 
+	AbilitySystemComponent = CreateDefaultSubobject<UBaseAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+	AbilitySystemComponent->SetIsReplicated(true);
+
+	AttributeSet = CreateDefaultSubobject<UBaseAttributeSet>(TEXT("AttributeSet"));
 }
 
 void AEnemyCharacter::Tick(float DeltaTime)
