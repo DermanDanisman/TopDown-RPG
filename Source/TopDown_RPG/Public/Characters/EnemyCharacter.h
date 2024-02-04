@@ -24,7 +24,11 @@ public:
 
 public:
 
-	/* EnemyCharacter cannot instantiate abstract class. 
+	/************************
+	* Highlighting Mechanism
+	*/
+
+	/** EnemyCharacter cannot instantiate abstract class. 
 	Because, as soon as we added a pure virtual function to HighlightInterface, 
 	it became an abstract class and you cannot instantiate an abstract class without overriding its pure virtual functions. 
 	So we have to override both of these. */
@@ -32,6 +36,7 @@ public:
 	virtual void UnHighlightActor() override;
 
 protected:
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 };

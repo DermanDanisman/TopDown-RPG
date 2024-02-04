@@ -7,7 +7,7 @@
 #include "AbilitySystemInterface.h"
 #include "PlayerCharacterState.generated.h"
 
-/* Forward Declaring Classes */
+/** Forward Declaring Classes */
 class UAbilitySystemComponent;
 class UAttributeSet;
 
@@ -23,10 +23,21 @@ public:
 
 	APlayerCharacterState();
 
+public:
+
+	/******************
+	* Getter Functions
+	*/
+
+	// IAbilitySystemInterface - Returns the ability system component to use for this actor.
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
+	UAttributeSet* GetAttributeSet() const;
 
 protected:
+
+	/*****************
+	* Ability System
+	*/
 
 	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;

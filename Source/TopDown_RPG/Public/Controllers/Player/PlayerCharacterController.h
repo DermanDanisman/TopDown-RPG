@@ -6,12 +6,12 @@
 #include "GameFramework/PlayerController.h"
 #include "PlayerCharacterController.generated.h"
 
-/* Forward Declaring Classes */
+/** Forward Declaring Classes */
 class ACharacter;
 class UInputMappingContext;
 class UInputAction;
 class IHighlightInterface;
-/* Forward Declaring Structs */
+/** Forward Declaring Structs */
 struct FInputActionValue;
 /**
  * 
@@ -69,7 +69,7 @@ private:
 private:
 
 	/**********
-	* Highlight
+	* Highlighting Mechanism
 	*/
 
 	UPROPERTY(VisibleAnywhere, Category = "Highlight")

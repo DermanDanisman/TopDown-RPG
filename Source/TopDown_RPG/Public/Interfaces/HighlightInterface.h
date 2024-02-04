@@ -23,7 +23,7 @@ class TOPDOWN_RPG_API IHighlightInterface
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 
-	/* A pure virtual function, which means that we will not provide a definition here in this class. 
+	/** A pure virtual function, which means that we will not provide a definition here in this class. 
 	This class now considered as Abstract and must be derived from */
 	virtual void HighlightActor() = 0;
 	virtual void UnHighlightActor() = 0;

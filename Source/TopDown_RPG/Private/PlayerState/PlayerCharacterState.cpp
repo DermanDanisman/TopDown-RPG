@@ -10,6 +10,8 @@ APlayerCharacterState::APlayerCharacterState()
 {
 	AbilitySystemComponent = CreateDefaultSubobject<UBaseAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	AbilitySystemComponent->SetIsReplicated(true);
+	/** How gameplay effects will be replicated to clients */
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
 
 	AttributeSet = CreateDefaultSubobject<UBaseAttributeSet>(TEXT("AttributeSet"));
 
@@ -19,4 +21,9 @@ APlayerCharacterState::APlayerCharacterState()
 UAbilitySystemComponent* APlayerCharacterState::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
+}
+
+UAttributeSet* APlayerCharacterState::GetAttributeSet() const
+{
+	return AttributeSet;
 }

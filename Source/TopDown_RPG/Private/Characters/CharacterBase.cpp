@@ -22,8 +22,15 @@ void ACharacterBase::BeginPlay()
 	
 }
 
+/** Returns Ability System Component */
 UAbilitySystemComponent* ACharacterBase::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
+}
+
+/** Returns Attribute Set */
+UAttributeSet* ACharacterBase::GetAttributeSet() const
+{
+	return AttributeSet;
 }
 

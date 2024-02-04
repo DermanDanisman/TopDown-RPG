@@ -18,7 +18,7 @@
 
 APlayerCharacterController::APlayerCharacterController()
 {
-	/* Player Controller is designated to be a replicated entity */
+	/** Player Controller is designated to be a replicated entity */
 	bReplicates = true;
 }
 
@@ -26,6 +26,7 @@ void APlayerCharacterController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
 
+	/** Function to detect and interact with objects under the cursor. */
 	CursorTrace();
 }
 
@@ -35,15 +36,15 @@ void APlayerCharacterController::BeginPlay()
 
 	ControlledCharacter = CastChecked<ACharacter>(GetPawn());
 
-	/* The check() macro in Unreal Engine is a form of assert.
+	/** The check() macro in Unreal Engine is a form of assert.
 	It's used to verify that a certain condition is true during runtime in development builds (like Debug and Development builds).
 	If the condition inside check() evaluates to false, the program will halt, and Unreal Engine will provide diagnostic information, such as the file and line number where the failure occurred.
 	The primary purpose of check() is to catch programming errors and incorrect assumptions during development, rather than being used as a control flow mechanism in the final product. */
-	/* Using an assert. "check" here and we'll check the DefaultContext pointer.
+	/** Using an assert. "check" here and we'll check the DefaultContext pointer.
 	So check is going to halt execution if this condition fails and DefaultContext being a pointer will be evaluated as false if it hasn't been set yet. */
 	check(DefaultContext);
 
-	/* Adding Mapping Context */
+	/** Adding Mapping Context */
 	UEnhancedInputLocalPlayerSubsystem* InputLocalPlayerSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
 	check(InputLocalPlayerSubsystem);
 	if (InputLocalPlayerSubsystem)
@@ -59,7 +60,7 @@ void APlayerCharacterController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	/* Binding Input Actions to their respective functions */
+	/** Binding Input Actions to their respective functions */
 	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
 	// Moving
 	EnhancedInputComponent->BindAction(IA_Move, ETriggerEvent::Triggered, this, &APlayerCharacterController::Move);
@@ -72,19 +73,20 @@ void APlayerCharacterController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(IA_GamepadCursor, ETriggerEvent::Triggered, this, &APlayerCharacterController::ControlCursorWithGamepad);
 }
 
-/**/
+/** Performs a line trace or object trace under the cursor to detect interactive objects, 
+highlighting them based on their current and previous states to provide visual feedback. */
 void APlayerCharacterController::CursorTrace()
 {
 	FHitResult CursorHit;
 
-	/* This is TraceForChannels */
+	/** This is TraceForChannels */
 	//GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, CursorHit);
-	/* This is TraceForObjects */
+	/** This is TraceForObjects */
 	GetHitResultUnderCursorForObjects(CursorTraceObjectType, false, CursorHit);
 
 	if (!CursorHit.bBlockingHit) return;
 
-	/* LastActor will store what ThisActor was before we updated it.
+	/** LastActor will store what ThisActor was before we updated it.
 	In other words, what it was last frame so we can check the values of these. */
 	LastActor = ThisActor;
 	ThisActor = Cast<IHighlightInterface>(CursorHit.GetActor());
@@ -117,7 +119,7 @@ void APlayerCharacterController::CursorTrace()
 	}
 }
 
-/* Function responsible for Cursor Settings */
+/** Configures cursor visibility and behavior, allowing the player to interact with both the game world and UI elements seamlessly. */
 void APlayerCharacterController::SetCursorSettings()
 {
 	bShowMouseCursor = true;
@@ -129,7 +131,7 @@ void APlayerCharacterController::SetCursorSettings()
 	SetInputMode(InputModeData);
 }
 
-/* Input Function responsible for character movement */ 
+/** Input Function responsible for character movement */ 
 void APlayerCharacterController::Move(const FInputActionValue& InputActionValue)
 {
 	const FVector2D InputAxisVector = InputActionValue.Get<FVector2D>();
@@ -148,7 +150,9 @@ void APlayerCharacterController::Move(const FInputActionValue& InputActionValue)
 	ControlledCharacter->AddMovementInput(RightDirection, InputAxisVector.X);
 }
 
-/* Input Function responsible for cursor movement using Gamepad Left Thumbstick */ /* Heathrow */
+/** Heathrow */
+/** Allows for cursor control using a gamepad's thumbstick, 
+translating thumbstick movement into cursor movement on the screen. */ 
 void APlayerCharacterController::ControlCursorWithGamepad(const FInputActionValue& InputActionValue)
 {
 	const FVector2D InputAxisVector = InputActionValue.Get<FVector2D>();
@@ -166,7 +170,9 @@ void APlayerCharacterController::ControlCursorWithGamepad(const FInputActionValu
 	SetMouseLocation(X, Y);
 }
 
-/* When Pressed ALT Gets All Highlightable Objects */ /* Heathrow */
+/** Heathrow */
+/** Retrieves all actors tagged as "HighlightableActors" and stores them in an array for potential highlighting. 
+This is called when a specific input action is triggered. */ 
 void APlayerCharacterController::GetHighlightableActors()
 {
 	HighlightableActors.Empty();
@@ -182,7 +188,9 @@ void APlayerCharacterController::GetHighlightableActors()
 	}
 }
 
-/* Highlightable objects within certain range gets highlighted */ /* Heathrow */
+/** Heathrow */
+/** Highlights all detectable actors within a certain range, making them visually distinct.
+This could be triggered while a specific key is held down. */ 
 void APlayerCharacterController::HighlightAll()
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Blue, FString::Printf(TEXT("Highlight All")));
@@ -206,7 +214,9 @@ void APlayerCharacterController::HighlightAll()
 	}
 }
 
-/* When ALT button released all highlightable objects gets Unhighlighted and Arrays gets emptied */ /* Heathrow */
+/** Heathrow */
+/** Reverses the highlighting effect on all previously highlighted actors and clears the list of highlightable actors. 
+This is usually called when the input action is released. */ 
 void APlayerCharacterController::UnhighlightAll()
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Blue, FString::Printf(TEXT("UnHighlight All")));
