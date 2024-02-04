@@ -6,6 +6,10 @@
 #include "Characters/CharacterBase.h"
 #include "PlayerCharacter.generated.h"
 
+/** Forward Declaring Classes */
+class APlayerController;
+class APlayerCharacterState;
+
 /**
  * 
  */
@@ -18,10 +22,23 @@ public:
 	// Sets default values for this character's properties
 	APlayerCharacter();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+public:
+
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void OnRep_PlayerState() override;
 
 private:
 
+	/*************
+	* References
+	*/
+	UPROPERTY(VisibleAnywhere, Category = "References")
+	TObjectPtr<APlayerController> PlayerController;
+
+	UPROPERTY(VisibleAnywhere, Category = "References")
+	TObjectPtr<APlayerCharacterState> PlayerCharacterState;
+
+private:
+
+	void InitAbilityActorInfo();
 };

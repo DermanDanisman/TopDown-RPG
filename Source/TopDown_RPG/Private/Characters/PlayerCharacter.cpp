@@ -3,6 +3,13 @@
 
 #include "Characters/PlayerCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
+/** Controllers */
+#include "Controllers/Player/PlayerCharacterController.h"
+/** Player State */
+#include "PlayerState/PlayerCharacterState.h"
+/** Ability System */
+#include "AbilitySystem/BaseAbilitySystemComponent.h"
+#include "AbilitySystem/BaseAttributeSet.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -20,7 +27,38 @@ APlayerCharacter::APlayerCharacter()
 	bUseControllerRotationYaw = false;
 }
 
-void APlayerCharacter::BeginPlay()
+void APlayerCharacter::InitAbilityActorInfo()
 {
-	Super::BeginPlay();
+	PlayerCharacterState = GetPlayerState<APlayerCharacterState>();
+	if (PlayerCharacterState)
+	{
+		PlayerCharacterState->GetAbilitySystemComponent()->InitAbilityActorInfo(PlayerCharacterState, this);
+		AbilitySystemComponent = PlayerCharacterState->GetAbilitySystemComponent();
+		AttributeSet = PlayerCharacterState->GetAttributeSet();
+	}
+}
+
+/** Init Ability Actor Info for the server */
+void APlayerCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Blue, FString::Printf(TEXT("Possessed By Called")));
+
+	PlayerController = Cast<APlayerController>(NewController);
+
+	if (PlayerController)
+	{
+		InitAbilityActorInfo();
+	}
+}
+
+/** Init Ability Actor Info for the client */
+void APlayerCharacter::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+
+	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Blue, FString::Printf(TEXT("OnRep_PlayerState Called")));
+
+	InitAbilityActorInfo();
 }

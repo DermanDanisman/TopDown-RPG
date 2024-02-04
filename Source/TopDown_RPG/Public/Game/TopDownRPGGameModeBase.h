@@ -14,4 +14,8 @@ class TOPDOWN_RPG_API ATopDownRPGGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+protected:
+
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 };

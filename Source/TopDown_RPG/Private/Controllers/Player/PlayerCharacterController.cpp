@@ -34,7 +34,7 @@ void APlayerCharacterController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ControlledCharacter = CastChecked<ACharacter>(GetPawn());
+	//ControlledCharacter = CastChecked<ACharacter>(GetPawn());
 
 	/** The check() macro in Unreal Engine is a form of assert.
 	It's used to verify that a certain condition is true during runtime in development builds (like Debug and Development builds).
@@ -142,12 +142,12 @@ void APlayerCharacterController::Move(const FInputActionValue& InputActionValue)
 	//FRotator ForwardMakeRot = UKismetMathLibrary::MakeRotator(0.f, 0.f, Rotation.Yaw);
 	//FVector ForwardDirection = UKismetMathLibrary::GetForwardVector(ForwardMakeRot);
 	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	ControlledCharacter->AddMovementInput(ForwardDirection, InputAxisVector.Y);
+	GetPawn()->AddMovementInput(ForwardDirection, InputAxisVector.Y);
 
 	//FRotator RightMakeRot = UKismetMathLibrary::MakeRotator(0.f, 0.f, Rotation.Yaw);
 	//FVector RightDirection = UKismetMathLibrary::GetRightVector(RightMakeRot);
 	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-	ControlledCharacter->AddMovementInput(RightDirection, InputAxisVector.X);
+	GetPawn()->AddMovementInput(RightDirection, InputAxisVector.X);
 }
 
 /** Heathrow */
@@ -202,7 +202,7 @@ void APlayerCharacterController::HighlightAll()
 	{
 		for (int i = 0; i < HighlightableActors.Num(); i++)
 		{
-			if (ControlledCharacter->GetDistanceTo(Cast<AActor>(HighlightableActors[i])) <= Distance)
+			if (GetPawn()->GetDistanceTo(Cast<AActor>(HighlightableActors[i])) <= Distance)
 			{
 				HighlightableActors[i]->HighlightActor();
 			}

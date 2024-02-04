@@ -30,6 +30,9 @@ void AEnemyCharacter::Tick(float DeltaTime)
 void AEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	check(AbilitySystemComponent);
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 }
 
 /** Enables a custom depth pass for the enemy's mesh and weapon, 

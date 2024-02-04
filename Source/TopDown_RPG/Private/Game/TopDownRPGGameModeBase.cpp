@@ -3,3 +3,9 @@
 
 #include "Game/TopDownRPGGameModeBase.h"
 
+void ATopDownRPGGameModeBase::BeginPlay()
+{
+	Super::BeginPlay();
+
+	
+}
