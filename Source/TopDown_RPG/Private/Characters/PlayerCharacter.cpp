@@ -27,6 +27,7 @@ APlayerCharacter::APlayerCharacter()
 	bUseControllerRotationYaw = false;
 }
 
+/** Setting Init Ability Actor Info and Initializing AbilitySystemComponent & AttributeSet */
 void APlayerCharacter::InitAbilityActorInfo()
 {
 	PlayerCharacterState = GetPlayerState<APlayerCharacterState>();

@@ -24,6 +24,9 @@ public:
 
 public:
 
+	/**
+	* 
+	*/
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
 
@@ -40,5 +43,8 @@ private:
 
 private:
 
+	/***************
+	* Ability System
+	*/
 	void InitAbilityActorInfo();
 };

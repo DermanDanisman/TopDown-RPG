@@ -31,6 +31,7 @@ void AEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	/** Setting Init Ability Actor Info for AI-Controlled Character */
 	check(AbilitySystemComponent);
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 }
