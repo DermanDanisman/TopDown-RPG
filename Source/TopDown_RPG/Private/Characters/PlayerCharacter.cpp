@@ -10,6 +10,8 @@
 /** Ability System */
 #include "AbilitySystem/BaseAbilitySystemComponent.h"
 #include "AbilitySystem/BaseAttributeSet.h"
+/** HUD */
+#include "UI/HUD/BaseHUD.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -31,11 +33,19 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::InitAbilityActorInfo()
 {
 	PlayerCharacterState = GetPlayerState<APlayerCharacterState>();
-	if (PlayerCharacterState)
+	PlayerController = Cast<APlayerCharacterController>(GetController());
+	checkf(PlayerCharacterState, TEXT("Player Character State Uninitialized!"));
+	if (PlayerCharacterState && PlayerController)
 	{
 		PlayerCharacterState->GetAbilitySystemComponent()->InitAbilityActorInfo(PlayerCharacterState, this);
 		AbilitySystemComponent = PlayerCharacterState->GetAbilitySystemComponent();
 		AttributeSet = PlayerCharacterState->GetAttributeSet();
+
+		ABaseHUD* BaseHUD = Cast<ABaseHUD>(PlayerController->GetHUD());
+		if (BaseHUD)
+		{
+			BaseHUD->InitOverlay(PlayerController, PlayerCharacterState, AbilitySystemComponent, AttributeSet);
+		}
 	}
 }
 
@@ -46,12 +56,7 @@ void APlayerCharacter::PossessedBy(AController* NewController)
 
 	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Blue, FString::Printf(TEXT("Possessed By Called")));
 
-	PlayerController = Cast<APlayerController>(NewController);
-
-	if (PlayerController)
-	{
-		InitAbilityActorInfo();
-	}
+	InitAbilityActorInfo();
 }
 
 /** Init Ability Actor Info for the client */

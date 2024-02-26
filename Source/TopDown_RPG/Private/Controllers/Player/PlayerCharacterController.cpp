@@ -46,7 +46,11 @@ void APlayerCharacterController::BeginPlay()
 
 	/** Adding Mapping Context */
 	UEnhancedInputLocalPlayerSubsystem* InputLocalPlayerSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
-	check(InputLocalPlayerSubsystem);
+	/** If we're to check the InputLocalPlayerSubsystem and we're calling AddMappingContext here. 
+	In Beginplay for PlayerCharacterController, we're not going to get a valid subsystem unless we're on the locally controlled machine who has a valid local player here. 
+	So this is one of those cases where we should check the subsystem instead of using an assert that says check. 
+	So that's kind of an important detail now that we're thinking about multiplayer. */
+	//check(InputLocalPlayerSubsystem);
 	if (InputLocalPlayerSubsystem)
 	{
 		InputLocalPlayerSubsystem->ClearAllMappings();

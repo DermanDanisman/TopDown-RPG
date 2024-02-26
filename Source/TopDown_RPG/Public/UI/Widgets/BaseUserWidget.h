@@ -19,7 +19,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetWidgetController(UObject* InWidgetController);
 
-	UPROPERTY(BlueprintReadOnly, Category = "Widget Controller")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Widget Controller")
 	TObjectPtr<UObject> WidgetController;
 
 protected:
