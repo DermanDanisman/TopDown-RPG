@@ -6,11 +6,15 @@
 #include "UObject/NoExportTypes.h"
 #include "BaseWidgetController.generated.h"
 
+/**
+ * This is the base WidgetController, all the WidgetControllers will derive from this class.
+ */
+
 /** Forward Declaring Classes */
 class UAbilitySystemComponent;
 class UAttributeSet;
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType) 
 struct FWidgetControllerParams
 {
 	GENERATED_BODY()
@@ -37,9 +41,6 @@ struct FWidgetControllerParams
 
 };
 
-/**
- * 
- */
 UCLASS()
 class TOPDOWN_RPG_API UBaseWidgetController : public UObject
 {
@@ -49,6 +50,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetWidgetControllerParams(const FWidgetControllerParams WCParams);
+
+	/** Any WidgetController that inherits this function should be able to broadcast its own unique initial values. */
+	virtual void BroadcastInitialValues();
 	
 protected:
 

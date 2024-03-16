@@ -4,7 +4,10 @@
 #include "Actor/EffectActor.h"
 #include "Components/SphereComponent.h"
 #include "AbilitySystemComponent.h"
+/* Interfaces */
 #include "AbilitySystemInterface.h"
+/* Ability System */
+#include "AbilitySystem/BaseAbilitySystemComponent.h"
 #include "AbilitySystem/BaseAttributeSet.h"
 
 // Sets default values
@@ -13,9 +16,11 @@ AEffectActor::AEffectActor()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
+	DefaultSceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT("DefaultSceneRoot"));
+	SetRootComponent(DefaultSceneRoot);
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	SetRootComponent(Mesh);
+	Mesh->SetupAttachment(GetRootComponent());
 
 	Sphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere"));
 	Sphere->SetupAttachment(GetRootComponent());
@@ -30,7 +35,8 @@ void AEffectActor::BeginPlay()
 	Sphere->OnComponentEndOverlap.AddDynamic(this, &AEffectActor::EndOverlap);
 }
 
-void AEffectActor::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void AEffectActor::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, 
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	IAbilitySystemInterface* ASCInterface = Cast<IAbilitySystemInterface>(OtherActor);
 
@@ -39,6 +45,7 @@ void AEffectActor::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 	{
 		const UBaseAttributeSet* AttributeSet = Cast<UBaseAttributeSet>(ASCInterface->GetAbilitySystemComponent()->GetAttributeSet(UBaseAttributeSet::StaticClass()));
 		
+		/** const_cast breaks encapsulation, this is a bad habit so it should be done in extreme caution. */
 		UBaseAttributeSet* MutableAttributeSet = const_cast<UBaseAttributeSet*>(AttributeSet);
 		MutableAttributeSet->SetHealth(AttributeSet->GetHealth() + 25.f);
 		Destroy();

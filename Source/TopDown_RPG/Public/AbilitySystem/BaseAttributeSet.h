@@ -24,35 +24,44 @@ class TOPDOWN_RPG_API UBaseAttributeSet : public UAttributeSet
 	
 public:
 
+	// Sets default values for this class's properties
 	UBaseAttributeSet();
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	/**
-	* Core Attribute Variables
+	/*************************
+	* Vital Attribute Variables
 	*/
 
 	/** Rep Notifies are called automatically when a variable replicates, 
 	so when the server replicates the variable down to a client, 
 	the client will have the rep notify for that variable triggered as a result. */
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "Core Attributes")
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "Vital Attributes")
 	FGameplayAttributeData Health;
 
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxHealth, Category = "Core Attributes")
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxHealth, Category = "Vital Attributes")
 	FGameplayAttributeData MaxHealth;
 
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Mana, Category = "Core Attributes")
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Mana, Category = "Vital Attributes")
 	FGameplayAttributeData Mana;
 
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxMana, Category = "Core Attributes")
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxMana, Category = "Vital Attributes")
 	FGameplayAttributeData MaxMana;
 
+	/**
+	* Vital Attribute Getters
+	*/
 
+	/** MACRO for Getting or Setting the FGameplayAttributeData or its numerical value */
+	ATTRIBUTE_ACCESSORS(UBaseAttributeSet, Health);
+	ATTRIBUTE_ACCESSORS(UBaseAttributeSet, MaxHealth);
+	ATTRIBUTE_ACCESSORS(UBaseAttributeSet, Mana);
+	ATTRIBUTE_ACCESSORS(UBaseAttributeSet, MaxMana);
 
 public:
 
-	/**
-	* Core Attribute Functions
+	/**************************
+	* Vital Attribute Functions
 	*/
 
 	/** Rep Notifies can take zero arguments or they can take one argument and
@@ -69,15 +78,4 @@ public:
 	UFUNCTION()
 	void OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) const;
 
-public:
-
-	/**
-	* Core Attribute Getters
-	*/
-
-	/** MACRO for Getting or Setting the FGameplayAttributeData or its numerical value */
-	ATTRIBUTE_ACCESSORS(UBaseAttributeSet, Health);
-	ATTRIBUTE_ACCESSORS(UBaseAttributeSet, MaxHealth);
-	ATTRIBUTE_ACCESSORS(UBaseAttributeSet, Mana);
-	ATTRIBUTE_ACCESSORS(UBaseAttributeSet, MaxMana);
 };

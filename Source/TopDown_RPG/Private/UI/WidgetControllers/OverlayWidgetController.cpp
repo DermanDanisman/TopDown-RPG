@@ -3,3 +3,7 @@
 
 #include "UI/WidgetControllers/OverlayWidgetController.h"
 
+void UOverlayWidgetController::BroadcastInitialValues()
+{
+
+}

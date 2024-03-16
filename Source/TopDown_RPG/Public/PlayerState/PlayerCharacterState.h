@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerState.h"
+/* Interfaces */
 #include "AbilitySystemInterface.h"
 #include "PlayerCharacterState.generated.h"
 
@@ -31,6 +32,7 @@ public:
 
 	// IAbilitySystemInterface - Returns the ability system component to use for this actor.
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
 	UAttributeSet* GetAttributeSet() const;
 
 protected:
@@ -39,9 +41,9 @@ protected:
 	* Ability System
 	*/
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, Category = "Ability System")
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, Category = "Ability System")
 	TObjectPtr<UAttributeSet> AttributeSet;
 };

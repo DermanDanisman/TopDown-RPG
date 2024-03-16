@@ -28,6 +28,9 @@ protected:
 private:
 
 	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USceneComponent> DefaultSceneRoot;
+
+	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UStaticMeshComponent> Mesh;
 
 	UPROPERTY(VisibleAnywhere)

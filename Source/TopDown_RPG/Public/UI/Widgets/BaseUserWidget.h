@@ -24,6 +24,10 @@ public:
 
 protected:
 
-	UFUNCTION(BlueprintImplementableEvent)
+	/** Whenever we set the WidgetController for a given widget, we'll also call this function WidgetControllerSet().
+	And as soon as that happens, anything we want in the blueprint that we would like to do in response to the WidgetControllerSet(), we'll do that in the blueprint.
+	So that means we should associate setting the WidgetController with calling WidgetControllerSet().
+	These should be tied closely together. */
+	UFUNCTION(BlueprintImplementableEvent, Category = "Widget Controller")
 	void WidgetControllerSet();
 };

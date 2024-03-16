@@ -28,28 +28,31 @@ public:
 
 	UOverlayWidgetController* GetOverlayWidgetController(const FWidgetControllerParams& WCParams);
 
-	void InitOverlay(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS);
+	void InitOverlayWidget(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS);
 
 public:
 
-	/** Pointer to Wiget that will be shown as HUD */
-	UPROPERTY()
+	/** Pointer to Wiget that will be shown as HUD
+	HUD is a good class to create both the OverlayWidget and the WidgetController itself. */
+	UPROPERTY(VisibleAnywhere, Category = "References")
 	TObjectPtr<UBaseUserWidget> OverlayWidget;
 
 private:
 
-	UPROPERTY()
+	/** HUD is a good class to create both the OverlayWidget and the WidgetController itself. */
+	UPROPERTY(VisibleAnywhere, Category = "References")
 	TObjectPtr<UOverlayWidgetController> OverlayWidgetController;
 
 
 private:
 
+	/*****************
+	* Class References
+	*/
 
-	/** */
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "TSubclassOf")
 	TSubclassOf<UBaseUserWidget> OverlayWidgetClass;
 
-	/** */
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "TSubclassOf")
 	TSubclassOf<UOverlayWidgetController> OverlayWidgetControllerClass;
 };

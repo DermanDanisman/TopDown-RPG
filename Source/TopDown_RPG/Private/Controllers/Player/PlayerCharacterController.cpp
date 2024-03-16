@@ -36,26 +36,7 @@ void APlayerCharacterController::BeginPlay()
 
 	//ControlledCharacter = CastChecked<ACharacter>(GetPawn());
 
-	/** The check() macro in Unreal Engine is a form of assert.
-	It's used to verify that a certain condition is true during runtime in development builds (like Debug and Development builds).
-	If the condition inside check() evaluates to false, the program will halt, and Unreal Engine will provide diagnostic information, such as the file and line number where the failure occurred.
-	The primary purpose of check() is to catch programming errors and incorrect assumptions during development, rather than being used as a control flow mechanism in the final product. */
-	/** Using an assert. "check" here and we'll check the DefaultContext pointer.
-	So check is going to halt execution if this condition fails and DefaultContext being a pointer will be evaluated as false if it hasn't been set yet. */
-	check(DefaultContext);
-
-	/** Adding Mapping Context */
-	UEnhancedInputLocalPlayerSubsystem* InputLocalPlayerSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
-	/** If we're to check the InputLocalPlayerSubsystem and we're calling AddMappingContext here. 
-	In Beginplay for PlayerCharacterController, we're not going to get a valid subsystem unless we're on the locally controlled machine who has a valid local player here. 
-	So this is one of those cases where we should check the subsystem instead of using an assert that says check. 
-	So that's kind of an important detail now that we're thinking about multiplayer. */
-	//check(InputLocalPlayerSubsystem);
-	if (InputLocalPlayerSubsystem)
-	{
-		InputLocalPlayerSubsystem->ClearAllMappings();
-		InputLocalPlayerSubsystem->AddMappingContext(DefaultContext, 0);
-	}
+	SetupMappingContext();
 
 	SetCursorSettings();
 }
@@ -75,6 +56,30 @@ void APlayerCharacterController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(IA_HighlightAll, ETriggerEvent::Completed, this, &APlayerCharacterController::UnhighlightAll);
 	// Cursor Control with Gamepad Right Thumbstick
 	EnhancedInputComponent->BindAction(IA_GamepadCursor, ETriggerEvent::Triggered, this, &APlayerCharacterController::ControlCursorWithGamepad);
+}
+
+void APlayerCharacterController::SetupMappingContext()
+{
+	/** The check() macro in Unreal Engine is a form of assert.
+	It's used to verify that a certain condition is true during runtime in development builds (like Debug and Development builds).
+	If the condition inside check() evaluates to false, the program will halt, and Unreal Engine will provide diagnostic information, such as the file and line number where the failure occurred.
+	The primary purpose of check() is to catch programming errors and incorrect assumptions during development, rather than being used as a control flow mechanism in the final product. */
+	/** Using an assert. "check" here and we'll check the DefaultContext pointer.
+	So check is going to halt execution if this condition fails and DefaultContext being a pointer will be evaluated as false if it hasn't been set yet. */
+	check(DefaultContext);
+
+	/** Adding Mapping Context */
+	UEnhancedInputLocalPlayerSubsystem* InputLocalPlayerSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
+	/** If we're to check the InputLocalPlayerSubsystem and we're calling AddMappingContext here.
+	In Beginplay for PlayerCharacterController, we're not going to get a valid subsystem unless we're on the locally controlled machine who has a valid local player here.
+	So this is one of those cases where we should check the subsystem instead of using an assert that says check.
+	So that's kind of an important detail now that we're thinking about multiplayer. */
+	//check(InputLocalPlayerSubsystem);
+	if (InputLocalPlayerSubsystem)
+	{
+		InputLocalPlayerSubsystem->ClearAllMappings();
+		InputLocalPlayerSubsystem->AddMappingContext(DefaultContext, 0);
+	}
 }
 
 /** Performs a line trace or object trace under the cursor to detect interactive objects, 

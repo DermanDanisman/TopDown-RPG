@@ -32,8 +32,13 @@ APlayerCharacter::APlayerCharacter()
 /** Setting Init Ability Actor Info and Initializing AbilitySystemComponent & AttributeSet */
 void APlayerCharacter::InitAbilityActorInfo()
 {
+	// TODO: Remove Later!
+	FString ActorName;
+	ActorName = GetName();
+
 	PlayerCharacterState = GetPlayerState<APlayerCharacterState>();
 	PlayerController = Cast<APlayerCharacterController>(GetController());
+
 	checkf(PlayerCharacterState, TEXT("Player Character State Uninitialized!"));
 	if (PlayerCharacterState && PlayerController)
 	{
@@ -41,30 +46,51 @@ void APlayerCharacter::InitAbilityActorInfo()
 		AbilitySystemComponent = PlayerCharacterState->GetAbilitySystemComponent();
 		AttributeSet = PlayerCharacterState->GetAttributeSet();
 
-		ABaseHUD* BaseHUD = Cast<ABaseHUD>(PlayerController->GetHUD());
-		if (BaseHUD)
-		{
-			BaseHUD->InitOverlay(PlayerController, PlayerCharacterState, AbilitySystemComponent, AttributeSet);
-		}
+		/** Setting OverlayWidgetController variables */
+		InitOverlayWidgetInfo();
+	}
+	else
+	{
+		// TODO: Remove Later!
+		GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Blue, FString::Printf(TEXT("PlayerCharacter %s: InitAbilityActorInfo: Controller Is Not Valid!"), *ActorName));
+	}
+
+	// TODO: Remove Later!
+	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Blue, FString::Printf(TEXT("PlayerCharacter %s: InitAbilityActorInfo Called"), *ActorName));
+}
+
+void APlayerCharacter::InitOverlayWidgetInfo()
+{
+	ABaseHUD* BaseHUD = Cast<ABaseHUD>(PlayerController->GetHUD());
+	if (BaseHUD)
+	{
+		/** Setting OverlayWidgetController variables */
+		BaseHUD->InitOverlayWidget(PlayerController, PlayerCharacterState, AbilitySystemComponent, AttributeSet);
 	}
 }
 
-/** Init Ability Actor Info for the server */
 void APlayerCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 
-	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Blue, FString::Printf(TEXT("Possessed By Called")));
+	// TODO: Remove Later!
+	FString ActorName;
+	ActorName = GetName();
+	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Blue, FString::Printf(TEXT("PlayerCharacter %s: Possessed By Called"), *ActorName));
 
+	/** Init Ability Actor Info for the server */
 	InitAbilityActorInfo();
 }
 
-/** Init Ability Actor Info for the client */
 void APlayerCharacter::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
 
-	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Blue, FString::Printf(TEXT("OnRep_PlayerState Called")));
+	// TODO: Remove Later!
+	FString ActorName;
+	ActorName = GetName();
+	GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Blue, FString::Printf(TEXT("PlayerCharacter %s: OnRep_PlayerState Called"), *ActorName));
 
+	/** Init Ability Actor Info for the client */
 	InitAbilityActorInfo();
 }

@@ -29,6 +29,9 @@ public:
 protected:
 
 	virtual void BeginPlay();
+
+	virtual void SetupMappingContext();
+
 	// Called to bind functionality to input
 	virtual void SetupInputComponent() override;
 
@@ -63,8 +66,8 @@ private:
 	* References
 	*/
 
-	UPROPERTY(VisibleAnywhere, Category = "References")
-	TObjectPtr<ACharacter> ControlledCharacter = nullptr;
+	//UPROPERTY(VisibleAnywhere, Category = "References")
+	//TObjectPtr<ACharacter> ControlledCharacter = nullptr;
 
 private:
 

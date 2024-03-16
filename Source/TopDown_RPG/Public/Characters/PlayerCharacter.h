@@ -32,7 +32,7 @@ public:
 
 private:
 
-	/*************
+	/************
 	* References
 	*/
 	UPROPERTY(VisibleAnywhere, Category = "References")
@@ -47,4 +47,9 @@ private:
 	* Ability System
 	*/
 	void InitAbilityActorInfo();
+
+	/**************
+	* Widget System
+	*/
+	void InitOverlayWidgetInfo();
 };
