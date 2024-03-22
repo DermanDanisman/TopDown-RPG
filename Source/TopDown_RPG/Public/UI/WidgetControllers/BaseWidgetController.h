@@ -51,9 +51,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetWidgetControllerParams(const FWidgetControllerParams WCParams);
 
-	/** Any WidgetController that inherits this function should be able to broadcast its own unique initial values. */
+	/** A virtual function meant to be overridden to broadcast the initial values of attributes when the widget controller is first initialized.
+	Any WidgetController that inherits this function should be able to broadcast its own unique initial values. */
 	virtual void BroadcastInitialValues();
 
+	/** Another virtual function intended to be overridden to set up callbacks that respond to changes in the character's attributes. */
 	virtual void BindCallbacksToDependencies();
 	
 protected:

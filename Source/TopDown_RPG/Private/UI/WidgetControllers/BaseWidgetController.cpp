@@ -16,13 +16,13 @@ void UBaseWidgetController::SetWidgetControllerParams(const FWidgetControllerPar
 	AttributeSet = WCParams.AttributeSet;
 }
 
+/** A virtual function meant to be overridden to broadcast the initial values of attributes when the widget controller is first initialized. */
 void UBaseWidgetController::BroadcastInitialValues()
 {
 
 }
 
-/** Binding callbacks to the dependencies of widget controller is something that all widget controllers need to do. 
-So we can use this function to bind our callbacks to all those dependencies. */
+/** Another virtual function intended to be overridden to set up callbacks that respond to changes in the character's attributes. */
 void UBaseWidgetController::BindCallbacksToDependencies()
 {
 

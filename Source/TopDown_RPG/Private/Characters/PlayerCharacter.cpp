@@ -37,9 +37,10 @@ void APlayerCharacter::InitAbilityActorInfo()
 	ActorName = GetName();
 
 	PlayerCharacterState = GetPlayerState<APlayerCharacterState>();
-	PlayerController = Cast<APlayerCharacterController>(GetController());
+	PlayerController = Cast<APlayerCharacterController>(PlayerCharacterState->GetPlayerController());
 
 	checkf(PlayerCharacterState, TEXT("Player Character State Uninitialized!"));
+	//checkf(PlayerController, TEXT("Player Controller Uninitialized!"));
 	if (PlayerCharacterState && PlayerController)
 	{
 		PlayerCharacterState->GetAbilitySystemComponent()->InitAbilityActorInfo(PlayerCharacterState, this);

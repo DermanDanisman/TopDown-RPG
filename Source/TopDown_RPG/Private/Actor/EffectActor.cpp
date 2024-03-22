@@ -48,6 +48,7 @@ void AEffectActor::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* O
 		/** const_cast breaks encapsulation, this is a bad habit so it should be done in extreme caution. */
 		UBaseAttributeSet* MutableAttributeSet = const_cast<UBaseAttributeSet*>(AttributeSet);
 		MutableAttributeSet->SetHealth(AttributeSet->GetHealth() + 25.f);
+		MutableAttributeSet->SetMana(AttributeSet->GetMana() + 25.f);
 		Destroy();
 	}
 }

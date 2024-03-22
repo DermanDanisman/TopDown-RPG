@@ -5,6 +5,12 @@
 #include "AbilitySystem/BaseAttributeSet.h"
 #include "GameplayEffectTypes.h"
 
+/** This setup allows for a robust system where gameplay systems (like health and mana changes) can communicate changes directly to the UI in a decoupled manner,
+enabling real-time updates and reducing the need for polling or tightly coupling UI code to gameplay logic.
+It's a common pattern in games using the Gameplay Ability System to manage player abilities, stats, and effects. */
+
+/** This function grabs the current values of attributes from the BaseAttributeSet and broadcasts them using the previously defined multicast delegates.
+This is typically called when the widget is first displayed to ensure the UI shows the current state of the character's attributes. */
 void UOverlayWidgetController::BroadcastInitialValues()
 {
 	const UBaseAttributeSet* BaseAttributeSet = CastChecked<UBaseAttributeSet>(AttributeSet);
@@ -15,6 +21,8 @@ void UOverlayWidgetController::BroadcastInitialValues()
 	OnMaxManaChanged.Broadcast(BaseAttributeSet->GetMaxMana());
 }
 
+/** Sets up bindings between the attribute change events in the ability system component and the controller's methods. 
+When an attribute changes, the appropriate method in the widget controller is called, which in turn broadcasts the change to any listeners. */
 void UOverlayWidgetController::BindCallbacksToDependencies()
 {
 	const UBaseAttributeSet* BaseAttributeSet = CastChecked<UBaseAttributeSet>(AttributeSet);
@@ -31,6 +39,8 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(BaseAttributeSet->GetMaxManaAttribute()).AddUObject(this, &UOverlayWidgetController::MaxManaChanged);
 }
 
+/** These methods (HealthChanged, MaxHealthChanged, ManaChanged, MaxManaChanged) are callbacks invoked when their respective attributes change.
+They broadcast the new attribute values using the delegates. */
 void UOverlayWidgetController::HealthChanged(const FOnAttributeChangeData& AttributeData) const
 {
 	OnHealthChanged.Broadcast(AttributeData.NewValue);
