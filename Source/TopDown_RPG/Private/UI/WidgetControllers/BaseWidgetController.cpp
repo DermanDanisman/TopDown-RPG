@@ -20,3 +20,10 @@ void UBaseWidgetController::BroadcastInitialValues()
 {
 
 }
+
+/** Binding callbacks to the dependencies of widget controller is something that all widget controllers need to do. 
+So we can use this function to bind our callbacks to all those dependencies. */
+void UBaseWidgetController::BindCallbacksToDependencies()
+{
+
+}

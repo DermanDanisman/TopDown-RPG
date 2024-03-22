@@ -53,6 +53,8 @@ public:
 
 	/** Any WidgetController that inherits this function should be able to broadcast its own unique initial values. */
 	virtual void BroadcastInitialValues();
+
+	virtual void BindCallbacksToDependencies();
 	
 protected:
 
