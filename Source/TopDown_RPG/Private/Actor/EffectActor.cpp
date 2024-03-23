@@ -9,6 +9,7 @@
 /* Ability System */
 #include "AbilitySystem/BaseAbilitySystemComponent.h"
 #include "AbilitySystem/BaseAttributeSet.h"
+#include "AbilitySystemBlueprintLibrary.h"
 
 // Sets default values
 AEffectActor::AEffectActor()
@@ -19,43 +20,32 @@ AEffectActor::AEffectActor()
 	DefaultSceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT("DefaultSceneRoot"));
 	SetRootComponent(DefaultSceneRoot);
 
-	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	Mesh->SetupAttachment(GetRootComponent());
-
-	Sphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere"));
-	Sphere->SetupAttachment(GetRootComponent());
 }
 
 // Called when the game starts or when spawned
 void AEffectActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	Sphere->OnComponentBeginOverlap.AddDynamic(this, &AEffectActor::OnOverlap);
-	Sphere->OnComponentEndOverlap.AddDynamic(this, &AEffectActor::EndOverlap);
 }
 
-void AEffectActor::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, 
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+/** This function applies a gameplay effect to a target actor. */
+void AEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass)
 {
-	IAbilitySystemInterface* ASCInterface = Cast<IAbilitySystemInterface>(OtherActor);
+	/** Attempts to retrieve the UAbilitySystemComponent associated with the target actor. This component is essential for using the Gameplay Ability System. */
+	UAbilitySystemComponent* TargetAbilitySystemComponent = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
 
-	/** TODO: Change this to apply a GameplayEffect. For now, using const_cast as a hack! */
-	if (ASCInterface)
-	{
-		const UBaseAttributeSet* AttributeSet = Cast<UBaseAttributeSet>(ASCInterface->GetAbilitySystemComponent()->GetAttributeSet(UBaseAttributeSet::StaticClass()));
-		
-		/** const_cast breaks encapsulation, this is a bad habit so it should be done in extreme caution. */
-		UBaseAttributeSet* MutableAttributeSet = const_cast<UBaseAttributeSet*>(AttributeSet);
-		MutableAttributeSet->SetHealth(AttributeSet->GetHealth() + 25.f);
-		MutableAttributeSet->SetMana(AttributeSet->GetMana() + 25.f);
-		Destroy();
-	}
-}
+	/** Checks if the target actor has an AbilitySystemComponent. If not, it exits the method since applying a gameplay effect is not possible. */
+	if (TargetAbilitySystemComponent == nullptr) return;
 
-void AEffectActor::EndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{
-
+	check(GameplayEffectClass);
+	/** Creates a new effect context handle. This handle is used to provide additional context about the effect, such as who initiated it. */
+	FGameplayEffectContextHandle EffectContextHandle = TargetAbilitySystemComponent->MakeEffectContext();
+	/** Adds the AEffectActor instance as the source object to the effect context. This means that AEffectActor is considered the origin of the effect being applied. */
+	EffectContextHandle.AddSourceObject(this);
+	/** Creates a gameplay effect specification from the given effect class. The effect's level is set to 1.0f temporarily, and the previously created effect context is used. */
+	FGameplayEffectSpecHandle EffectSpecHandle = TargetAbilitySystemComponent->MakeOutgoingSpec(GameplayEffectClass, 1.0f, EffectContextHandle);
+	/** Applies the gameplay effect to the target actor itself, based on the specifications defined in EffectSpecHandle. */
+	TargetAbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
 }
 
 
