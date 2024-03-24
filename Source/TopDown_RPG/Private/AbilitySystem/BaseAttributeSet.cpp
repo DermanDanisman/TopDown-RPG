@@ -14,9 +14,9 @@ UBaseAttributeSet::UBaseAttributeSet()
 	SetHealth() -> Sets Numeric Attribute Base
 	InitHealth() -> Sets BaseValue and CurrentValue of an Attribute */
 
-	InitHealth(80.f);
+	InitHealth(25.f);
 	InitMaxHealth(100.f);
-	InitMana(80.f);
+	InitMana(25.f);
 	InitMaxMana(100.f);
 }
 

@@ -48,4 +48,9 @@ void AEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGamepla
 	TargetAbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
 }
 
+void AEffectActor::RemoveEffect(AActor* TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass)
+{
+
+}
+
 
